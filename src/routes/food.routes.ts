@@ -33,6 +33,10 @@ foodRouter.post('/', requireAuth, async (req, res) => {
     fatPer100g,
   } = req.body;
 
+  if (req.userId === undefined) {
+    return res.sendStatus(401);
+  }
+
   const food = await prisma.food.create({
     data: {
       name,

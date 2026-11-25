@@ -7,6 +7,7 @@ import { foodRouter } from './routes/food.routes';
 import { profileRoutes } from './routes/profile.routes';
 import { metricsRoutes } from './routes/metrics.routes';
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
+import { HttpError } from './errors/HttpError';
 
 export const app = express();
 
@@ -19,7 +20,7 @@ app.use(
       if (!origin || env.frontendUrls.includes('*') || env.frontendUrls.includes(origin)) {
         return callback(null, true);
       }
-      return callback(new Error(`Origem não permitida pelo CORS: ${origin}`));
+      return callback(new HttpError(403, `Origem não permitida pelo CORS: ${origin}`));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

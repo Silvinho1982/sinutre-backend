@@ -1,21 +1,7 @@
 import { Request, Response } from 'express';
-import { prisma } from '../prisma';
+import { getProfileData } from '../services/profile.service';
 
-export async function me(
-  req: Request,
-  res: Response,
-) {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: req.userId,
-    },
-    select: {
-      id: true,
-      githubLogin: true,
-      name: true,
-      avatarUrl: true,
-    },
-  });
-
-  return res.json(user);
+export async function me(req: Request, res: Response) {
+  const data = await getProfileData(req.userId!);
+  return res.json(data);
 }

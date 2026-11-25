@@ -1,52 +1,20 @@
 import { Router } from 'express';
 import { requireAuth } from '../middlewares/auth.middleware';
-import { prisma } from '../prisma';
+import {
+  createFood,
+  deleteFood,
+  getFood,
+  listFoods,
+  updateFood,
+} from '../controllers/foods.controller';
+import { asyncHandler } from '../utils/asyncHandler';
 
 export const foodRouter = Router();
 
-//foods/
-foodRouter.get('/', requireAuth, async (req, res) => {
-  const search = String(req.query.search ?? '');
-  const foods = await prisma.food.findMany({
-    where: {
-      userId: req.userId!,
-      name: {
-        contains: search,
-      }
-    },
-    take: 10,
-    orderBy: {
-      name: 'asc',
-    },
-  });
+foodRouter.use(requireAuth);
 
-  return res.json(foods);
-});
-
-
-foodRouter.post('/', requireAuth, async (req, res) => {
-  const {
-    name,
-    caloriesPer100g,
-    carbsPer100g,
-    proteinPer100g,
-    fatPer100g,
-  } = req.body;
-
-  if (req.userId === undefined) {
-    return res.sendStatus(401);
-  }
-
-  const food = await prisma.food.create({
-    data: {
-      name,
-      caloriesPer100g,
-      carbsPer100g,
-      proteinPer100g,
-      fatPer100g,
-      userId: req.userId!,
-    },
-  });
-
-  return res.status(201).json(food);
-});
+foodRouter.get('/', asyncHandler(listFoods));
+foodRouter.get('/:id', asyncHandler(getFood));
+foodRouter.post('/', asyncHandler(createFood));
+foodRouter.put('/:id', asyncHandler(updateFood));
+foodRouter.delete('/:id', asyncHandler(deleteFood));

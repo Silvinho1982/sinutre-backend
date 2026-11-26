@@ -10,7 +10,7 @@ dados complementares do usuário e endpoints de métricas (IMC e média calóric
 
 - **API:** https://sinutre-api-production.up.railway.app
 - **Healthcheck:** https://sinutre-api-production.up.railway.app/health
-- **Frontend:** _será preenchido após o deploy na Vercel_
+- **Frontend:** https://sinutre-frontend-zeta.vercel.app
 
 ## Stack
 
